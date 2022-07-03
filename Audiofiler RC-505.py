@@ -1,6 +1,6 @@
-# Track Merger
+# Audiofiler RC-505 Toolkit
 
-# WTF ARE ALL THESE
+# todo: remove extraneous imports
 from genericpath import isdir
 from lib2to3.pgen2.token import GREATER
 import os
@@ -10,15 +10,17 @@ from os.path import exists
 from unittest import suite
 from pydub import AudioSegment
 import tkinter as tk
+from tkinter import ttk
+from tkinter import *
 import requests
+import json
 
 #################
 # user interface
 #################
 
 window = tk.Tk()
-window.title = "Audiofiler: 505 Track Merger"
-window.geometry = ("500x800")
+window.title("Audiofiler RC-505")
 
 def welcome():
     greeting.config(text="Enter the song number in memory:")
@@ -191,9 +193,38 @@ button = tk.Button(
     command=welcome
 )
 
-# add label to window
+# container for dropdown
+frame = Frame(window)
+frame.pack()
+
+songsAudiofiler = (requests.get('http://api.ragtagrecords.com/public/songs')).json()
+
+# parse x:
+#y = json.loads(x.json())
+
+# songs available to select
+songs = []
+songNames = []
+
+# the result is a Python dictionary:
+for song in songsAudiofiler:
+    songObject = {"name":None , "id":None}
+    songObject["name"] = song["name"]
+    songObject["id"] = song["id"]
+    songs.append(songObject)
+
+for song in songs:
+    songNames.append(song["name"])
+ 
+# configure dropdown menu
+Combo = ttk.Combobox(frame, values = songNames)
+Combo.set("Pick an song")
+
+# add ui elements to the window
 greeting.pack()
 button.pack()
+Combo.pack(padx = 20, pady = 5)
+
 
 ############
 # backend
