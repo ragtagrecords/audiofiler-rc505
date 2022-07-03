@@ -1,7 +1,7 @@
 # audiofiler-rc505
 RC-505 toolkit with Audiofiler support
 
-**Download the latest build: [dist.zip](https://github.com/ragtagrecords/audiofiler-rc505/files/9033954/dist.zip)**
+**Download the latest build: [dist.zip](https://github.com/ragtagrecords/audiofiler-rc505/files/9034001/dist.zip)**
 
 If you are recording into your RC-505 and use up all 5 tracks, this process will allow you to continue recording as many tracks as you need while saving each indivdual stem seperately for mixing later:
 
@@ -24,3 +24,8 @@ The original stems will be saved locally in your RC-505 WAV directory with the o
 
 Using the Audiofiler API
 >https://github.com/ragtagrecords/audiofiler-fs
+
+
+To build the app in a Windows environment you can use this command line prompt:
+
+`pyinstaller.exe --onefile main.py`
