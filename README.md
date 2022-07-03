@@ -11,4 +11,4 @@ Pick and memory slot to create a master demo.
 
 The demo is then copied onto track 1 of the same memory slot and the other 4 tracks are cleared for you to continue recording.
 
-The original stems will be saved locally in your RC-505 WAV directory with the option to additionally upload the song to http://audiofiler.ragtagrecords.com via the Audiofiler API (see https://github.com/ragtagrecords/audiofiler-files)
+The original stems will be saved locally in your RC-505 WAV directory with the option to additionally upload the song to http://audiofiler.ragtagrecords.com via the Audiofiler API (see https://github.com/ragtagrecords/audiofiler-fs)
