@@ -28,4 +28,4 @@ Using the Audiofiler API
 
 To build the app in a Windows environment you can use this command line prompt:
 
-`pyinstaller.exe --onefile main.py`
+`pyinstaller --onefile "Audiofiler RC-505.py"`
