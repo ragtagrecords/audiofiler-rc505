@@ -1,32 +1,34 @@
-# Track Merger
+# Audiofiler RC-505 Toolkit
 
-# WTF ARE ALL THESE
+# todo: remove extraneous imports
 from genericpath import isdir
 from lib2to3.pgen2.token import GREATER
 import os
 import shutil
-import sys
 from os.path import exists
 from unittest import suite
 from pydub import AudioSegment
 import tkinter as tk
+from tkinter import ttk
+from tkinter import *
 import requests
+import json
 
 #################
 # user interface
 #################
 
 window = tk.Tk()
-window.title = "Audiofiler: 505 Track Merger"
-window.geometry = ("500x800")
+window.title("Audiofiler RC-505")
+
 
 def welcome():
     greeting.config(text="Enter the song number in memory:")
-    button.config(text="Submit", command=submitSongID)
+    button.config(text="Submit", command=submitMemoryID)
     entry.pack()
 
 
-def submitSongID():
+def submitMemoryID():
     # get name of folder from user
     global memory
 
@@ -60,29 +62,23 @@ def submitSongID():
         print("memory slot is not defined")
         memoryExists = False
 
-    # if memory is defined as an integer
-    if memoryExists and isInt:
+    inRange = True
+    if memory not in range(1, 101):
+        inRange = False
+        # explicily ask for a number between 1 and 100
+        warning.config(text="Please pick a number between 1 and 100")
+        warning.pack()
+        print("memory slot " + str(memory) + " does not exist")
+
+        # reset for new input
+        entry.delete(0, 'end')
+
+    # if memory slot number is valid
+    if memoryExists and isInt and inRange:
         print("active memory slot: " + str(memory))
-        if memory not in range(1, 101):
-            # explicily ask for a number between 1 and 100
-            warning.config(text="Please pick a number between 1 and 100")
-            warning.pack()
-            print("memory slot " + str(memory) + " does not exist")
 
-            # reset for new input
-            entry.delete(0, 'end')
-
-        # todo: reach this condition properly
-        elif not tracksExist():
-            # explicitly ask for a memory slot with stems
-            warning.config(text="No tracks to merge in this memory slot")
-            warning.pack()
-            print("Either there is only one track or none")
-
-            # reset for new input
-            entry.delete(0, 'end')
-
-        elif tracksExist() and memory in range(1, 101):
+        # if enough tracks exist to upload
+        if tracksExist():
             # set new state
             greeting.config(text="The song number is " + str(memory) +
                             "\n Would you like to extend the length of the masters? \nEnter the number of times the loop should repeat\n(1 is default)\n")
@@ -94,15 +90,26 @@ def submitSongID():
 
             # remove warning label
             warning.forget()
+
         else:
-            print("all cases failed :(")
+            # explicitly ask for a memory slot with stems
+            warning.config(text="No tracks to merge in this memory slot")
+            warning.pack()
+            print("Either there is only one track or none")
+
+            # todo: if there is only one track,
+            # give option to upload this one without merging
+
+            # reset for new input
+            entry.delete(0, 'end')
+
     else:
         print("awaiting valid memory slot")
-
 
 def submitNumOfRepeats():
     global numOfRepeats
 
+    # todo: handle non numbers
     input = entry.get()
 
     numOfRepeats = int(entry.get())
@@ -115,7 +122,7 @@ def submitNumOfRepeats():
         # reset for new input
         entry.delete(0, "end")
     else:
-        print("Success: " + str(numOfRepeats))
+        print("Success: " + str(numOfRepeats) + " repeats")
         # set new state
         greeting.config(text="The song number is " + str(memory) + "\nand it will be repeated " +
                         str(numOfRepeats) + " times.\n\nAll tracks will be merged onto track 1")
@@ -126,24 +133,35 @@ def submitNumOfRepeats():
         entry.forget()
         warning.forget()
 
-        # add checkout to determine if user wants to upload
+        # add checkbox to determine if user wants to upload
         uploadOption.pack()
 
     print("awaiting valid number of repeats")
 
-check = tk.IntVar()
-def updateUploadOption ():
+
+checkUpload = tk.IntVar()
+checkSong = tk.IntVar()
+
+
+def updateUploadOption():
     global shouldUpload
 
-    if check.get() == 1:
+    if checkUpload.get() == 1:
         print("Upload checked")
         shouldUpload = True
-    elif check.get() == 0:
+
+        # add dropdown menu of songs available from database
+        frame.pack()
+        Combo.set(str(memory))
+        Combo.pack(padx=20, pady=5)
+        
+    elif checkUpload.get() == 0:
         print("Upload unchecked")
         shouldUpload = False
+        frame.forget()
+        Combo.forget()
 
 # UI elements attributes styles
-
 greeting = tk.Label(
     text="Hello, let's merge some tracks my guy.",
     fg="#5ae7ff",
@@ -174,8 +192,8 @@ uploadOption = tk.Checkbutton(
     fg="#5ae7ff",
     font=("monospace", 18),
     width=48,
-    height=5,
-    variable=check,
+    height=2,
+    variable=checkUpload,
     onvalue=1,
     offvalue=0,
     command=updateUploadOption
@@ -191,22 +209,50 @@ button = tk.Button(
     command=welcome
 )
 
-# add label to window
-greeting.pack()
-button.pack()
-
-############
-# backend
-############
-
-# name of folder for stems of a merged track
-d_stems = "unmerged-stems"
+if (requests.get('http://api.ragtagrecords.com/public/songs')):
+    songsDatabase = (requests.get(
+    'http://api.ragtagrecords.com/public/songs')).json()
+    print(songsDatabase)
+else: songsDatabase = []
 
 # global vars
 mode = "0"
 stemsFolderPath = ""
 numOfRepeats = 1
 shouldUpload = False
+memory = -1
+
+# songs available to select
+songs = []
+songNames = []
+
+# the result is a Python dictionary:
+for song in songsDatabase:
+    songObject = {"name": None, "id": None}
+    songObject["name"] = song["name"]
+    songObject["id"] = song["id"]
+    songs.append(songObject)
+
+for song in songs:
+    songNames.append(song["name"])
+
+# container for dropdown
+frame = Frame(window)
+
+# configure dropdown menu
+Combo = ttk.Combobox(frame, values=songNames)
+
+# add ui elements to the window
+greeting.pack()
+button.pack()
+
+# name of folder for stems of a merged track
+d_stems = "unmerged-stems"
+
+
+############
+# backend
+############
 
 def createFolderForSongStems(songNumber):
     # set path of curr stems folder
@@ -228,7 +274,6 @@ def exportMaster(songNumber, tracks, numOfTracks):
 
     if numOfTracks == 1:
         print("Only one track; nothing to merge")
-        sys.exit()
 
     if numOfTracks > 1:
 
@@ -281,56 +326,93 @@ def exportMaster(songNumber, tracks, numOfTracks):
 
         # check if user selected to upload song to web
         if shouldUpload:
-            print("User chose to upload song")
 
-            shutil.make_archive(stemsFolderPath, 'zip', stemsFolderPath)
-            print("song zip file name: " + str(songNumber).zfill(3) + ".zip")
-
-            # audiofiler api requests
-            songName = "505" + currFolderContents[0]
+            # define api endpoints
             wavURL = "http://files.ragtagrecords.com/songs/"
             zipURL = "http://files.ragtagrecords.com/zips/"
-
             songURL = "http://api.ragtagrecords.com/public/songs"
 
             fileName = filePath.split("/").pop()
+            
+            if songSelectedID == -1:
+                print("User chose to upload new song")
 
-            song = {
-                "song": {
-                    "name": songName,
-                    "path": wavURL + fileName,
-                    "playlistIDs": [123],
-                    "zipPath": zipURL + str(songNumber).zfill(3) + ".zip",
-                    # "parentID": parentID
+                # zip up the stems folder
+                shutil.make_archive(stemsFolderPath, 'zip', stemsFolderPath)
+                print("song zip file name: " + str(songNumber).zfill(3) + ".zip")
+
+                songName = "my505_" + songSelected
+
+                song = {
+                    "song": {
+                        "name": songName,
+                        "path": wavURL + fileName,
+                        # todo: make playlist select menu
+                        "playlistIDs": [123],
+                        "zipPath": zipURL + str(songNumber).zfill(3) + ".zip",
+                    }
                 }
-            }
 
-            songFileObject = {
-                "file": open(filePath, "rb")
-            }
+                songFileObject = {
+                    "file": open(filePath, "rb")
+                }
 
-            zipFileObjext = {
-                "file": open(stemsFolderPath + ".zip", "rb")
-            }
+                zipFileObjext = {
+                    "file": open(stemsFolderPath + ".zip", "rb")
+                }
 
-            # upload new song
-            postSong = requests.post(songURL, json=song)
-            postFile = requests.post(wavURL, files=songFileObject)
-            # and upload zipped stems folder
-            postZip = requests.post(zipURL, files=zipFileObjext)
+                # upload new song
+                postSong = requests.post(songURL, json=song)
+                postFile = requests.post(wavURL, files=songFileObject)
+                # and upload zipped stems folder
+                postZip = requests.post(zipURL, files=zipFileObjext)
 
-            print(postSong.text)
-            print(postFile.text)
+                print(postSong.text)
+                print(postFile.text)
+                print(postZip.text)
+
+            # check if user selected a song that already exists on the database
+            if songSelectedID:
+                print("User chose song already on the database")
+                print("parentID: " + str(songSelectedID))
+
+                shutil.make_archive(stemsFolderPath, 'zip', stemsFolderPath)
+                print("song zip file name: " + str(songNumber).zfill(3) + ".zip")
+
+                songName = "my505_" + songSelected
+
+                song = {
+                    "song": {
+                        "name": songName,
+                        "path": wavURL + fileName,
+                        "zipPath": zipURL + str(songNumber).zfill(3) + ".zip",
+                        "parentID": songSelectedID
+                    }
+                }
+
+                songFileObject = {
+                    "file": open(filePath, "rb")
+                }
+
+                zipFileObjext = {
+                    "file": open(stemsFolderPath + ".zip", "rb")
+                }
+
+                # upload new song
+                postSong = requests.post(songURL, json=song)
+                postFile = requests.post(wavURL, files=songFileObject)
+                # and upload zipped stems folder
+                postZip = requests.post(zipURL, files=zipFileObjext)
+
+                print(postSong.text)
+                print(postFile.text)
+                print(postZip.text)
 
         else:
             print("User chose not to upload song")
 
 
-
-
-# function to move files from individual folders into new aggregate numbered folder
-
-
+# move files from individual folders into new stems folder
 def findTracksForSong(songNumber):
 
     # create folder for song stems
@@ -383,17 +465,18 @@ def findTracksForSong(songNumber):
 
     numOfTracks = len(tracks)
 
-    greeting.config(text="song #: " + str(songNumber) +
-                    " | found " + str(numOfTracks) + " tracks\nYou may now close the program")
-
-    button.config(text="Continue?", command=welcome)
-
     # if we found tracks for this song
     if numOfTracks:
-
         # export wav master that combines the tracks
         exportMaster(songNumber, tracks, numOfTracks)
+
+        # display details of the export and asks user if they would like restart or exit
+        greeting.config(text="song #: " + str(songNumber) +
+                    " | found " + str(numOfTracks) + " tracks\nYou may now close the program")
+        button.config(text="Continue?", command=welcome)
+
         return 1
+
     else:
         return 0
 
@@ -411,22 +494,43 @@ def tracksExist():
         if(exists(folderName)):
 
             # if there are files in the current folder
-            if os.listdir(folderName):
-                return True
-
-            else:
+            if not os.listdir(folderName):
                 print("no stem here")
                 emptyCount += 1
 
-    if(emptyCount >= 4):
+    if(emptyCount == 5):
+        print("There are " + str(emptyCount) + " empty tracks in memory slot " + str(memory))
+        return False
+    elif(emptyCount == 4):
+        print("There are " + str(emptyCount) + " empty tracks in memory slot " + str(memory))
         return False
     else:
-        print(emptyCount)
+        print("There are " + str(emptyCount) + " empty tracks in memory slot " + str(memory))
+        return True
+
+def getID(name):
+    for song in songs:
+        if song["name"] == name:
+            return song["id"]
+
+    print("no song id found with that name")
+    return -1
 
 
 def mergeTracks():
-    # remove checkbox from ui
+    # remove selection ui
+    checkUpload.set(0)
     uploadOption.forget()
+    frame.forget()
+    Combo.forget()
+
+    # store song selection
+    global songSelected
+    songSelected = (Combo.get())
+    global songSelectedID
+    songSelectedID = getID(songSelected)
+    print("song selected: " + songSelected)
+    print("id: " + str(songSelectedID))
 
     # check if folder exists
     if not isdir(d_stems):
@@ -440,7 +544,7 @@ def mergeTracks():
     global mode
     # mode = input("Please choose desired mode:\n0: Only move file names that match the default RC-505 naming style\n1: Move all files no matter what their name is\n")
 
-    # attempt to move WAV files for this song to new folder
+    # attempt to move stems for this song to new folder
     findTracksForSong(memory)
     print("after findTracksForSong()")
 
