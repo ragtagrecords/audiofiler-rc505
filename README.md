@@ -1,7 +1,8 @@
-# audiofiler-rc505
-RC-505 toolkit with Audiofiler support
+# Audiofiler RC-505
 
-**Download the latest build: [dist.zip](https://github.com/ragtagrecords/audiofiler-rc505/files/9034007/dist.zip)**
+*Download the latest build:* [dist.zip](https://github.com/ragtagrecords/audiofiler-rc505/files/9034007/dist.zip)
+
+## Overview
 
 Normally when you are recording with an RC-505 and use all 5 tracks you must either record over an existing track or stop with 5.  
 
@@ -27,6 +28,13 @@ The original stems will be saved locally in your RC-505 WAV directory with the o
 Using the Audiofiler API
 >https://github.com/ragtagrecords/audiofiler-fs
 
+## Developers
+
+To run, install pydub:
+`pip install pydub`
+
+On Linux, install tkinter:
+`sudo apt-get install python3-tk`
 
 To build the app in a Windows environment you can use this command:
 
