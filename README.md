@@ -26,6 +26,6 @@ Using the Audiofiler API
 >https://github.com/ragtagrecords/audiofiler-fs
 
 
-To build the app in a Windows environment you can use this command line prompt:
+To build the app in a Windows environment you can use this command:
 
 `pyinstaller --onefile "Audiofiler RC-505.py"`
