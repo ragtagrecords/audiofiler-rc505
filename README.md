@@ -3,7 +3,9 @@ RC-505 toolkit with Audiofiler support
 
 **Download the latest build: [dist.zip](https://github.com/ragtagrecords/audiofiler-rc505/files/9034007/dist.zip)**
 
-If you are recording into your RC-505 and use up all 5 tracks, this process will allow you to continue recording as many tracks as you need while saving each indivdual stem seperately for mixing later:
+Normally when you are recording with an RC-505 and use all 5 tracks you must either record over an existing track or stop with 5.  
+
+This process will allow you to continue recording to new tracks while saving each indivdual stem seperately for mixing and arranging later:
 
 - Plug your RC-505 into your computer and drag the Audiofiler-RC505 executable into the WAV directory.
 
