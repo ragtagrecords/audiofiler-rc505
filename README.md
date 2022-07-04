@@ -15,7 +15,7 @@ If you are recording into your RC-505 and use up all 5 tracks, this process will
 
 - Here you are given options to customize your save.
 
-- Sumbit and you're done.
+- Submit and you're done.
 
 The demo is then copied onto track 1 of the same memory slot and the other 4 tracks are cleared for you to continue recording.
 
