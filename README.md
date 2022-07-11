@@ -1,6 +1,7 @@
 # Audiofiler RC-505
 
-*Download the latest build:* [dist.zip](https://github.com/ragtagrecords/audiofiler-rc505/files/9081004/dist.zip)
+*Download the latest build:* [dist.zip](https://github.com/ragtagrecords/audiofiler-rc505/files/9084519/dist.zip)
+
 
 ## Overview
 
