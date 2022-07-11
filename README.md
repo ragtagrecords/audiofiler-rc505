@@ -38,4 +38,4 @@ On Linux, install tkinter:
 
 To build the app in a Windows environment you can use this command:
 
-`pyinstaller --onefile "Audiofiler RC-505.py"`
+`pyinstaller --onefile "Audiofiler RC-505.py" –windowed`
