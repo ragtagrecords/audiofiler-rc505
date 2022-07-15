@@ -5,7 +5,7 @@
 
 ## Overview
 
-Normally when you are recording with an [RC-505](https://www.boss.info/global/products/rc-505/) and use all 5 tracks you must either record over an existing track or stop with 5.  
+Normally when you are recording with an RC-505 and use all 5 tracks you must either record over an existing track or stop with 5.  
 
 This process will allow you to continue recording to new tracks while saving each indivdual stem seperately for mixing and arranging later:
 
@@ -24,7 +24,7 @@ This process will allow you to continue recording to new tracks while saving eac
 The demo is then copied onto track 1 of the same memory slot and the other 4 tracks are cleared for you to continue recording.
 
 The original stems will be saved locally in your RC-505 WAV directory with the option to additionally upload the song to 
->http://audiofiler.ragtagrecords.com
+>https://audiofiler.ragtagrecords.com
 
 Using the Audiofiler API
 >https://github.com/ragtagrecords/audiofiler-fs
