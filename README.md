@@ -5,7 +5,7 @@
 
 ## Overview
 
-Normally when you are recording with an RC-505 and use all 5 tracks you must either record over an existing track or stop with 5.  
+Normally when you are recording with an [RC-505](https://www.boss.info/global/products/rc-505/) and use all 5 tracks you must either record over an existing track or stop with 5.  
 
 This process will allow you to continue recording to new tracks while saving each indivdual stem seperately for mixing and arranging later:
 
