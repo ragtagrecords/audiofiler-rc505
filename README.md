@@ -5,9 +5,9 @@
 
 ## Overview
 
-Normally when you are recording with an [RC-505](https://www.boss.info/global/products/rc-505/) and use all 5 tracks you must either record over an existing track or stop with 5.  
+Normally when you are recording with an [RC-505](https://www.boss.info/global/products/rc-505/) and use all 5 tracks you must either record over an existing track or stop with 5 tracks.  
 
-This process will allow you to continue recording to new tracks while saving each indivdual stem seperately for mixing and arranging later:
+The following process will allow you to continue recording to new tracks while saving each indivdual stem seperately for mixing and arranging later:
 
 - Plug your RC-505 into your computer and drag the Audiofiler-RC505 executable into the WAV directory.
 
