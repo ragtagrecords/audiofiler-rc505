@@ -1,5 +1,8 @@
 # Audiofiler RC-505 Toolkit
 
+# todo: break into services and components
+# type things
+
 # todo: remove extraneous imports
 from genericpath import isdir
 from lib2to3.pgen2.token import GREATER
@@ -209,6 +212,7 @@ button = tk.Button(
     command=welcome
 )
 
+# todo: move this request and add some kind of loading screen
 if (requests.get('http://api.ragtagrecords.com/public/songs')):
     songsDatabase = (requests.get(
     'http://api.ragtagrecords.com/public/songs')).json()
