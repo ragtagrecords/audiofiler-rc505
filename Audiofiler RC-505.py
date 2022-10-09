@@ -1,7 +1,6 @@
 # Audiofiler RC-505 Toolkit
 
 # todo: break into services and components
-# type things
 
 # todo: remove extraneous imports
 from genericpath import isdir
@@ -212,12 +211,13 @@ button = tk.Button(
     command=welcome
 )
 
-# todo: move this request and add some kind of loading screen
-if (requests.get('http://api.ragtagrecords.com/public/songs')):
+# # todo: move this request and add some kind of loading screen
+if (requests.get('https://api.ragtagrecords.com/songs')):
     songsDatabase = (requests.get(
-    'http://api.ragtagrecords.com/public/songs')).json()
+    'https://api.ragtagrecords.com/songs')).json()
     print(songsDatabase)
-else: songsDatabase = []
+else: 
+    songsDatabase = []
 
 # global vars
 mode = "0"
@@ -326,18 +326,20 @@ def exportMaster(songNumber, tracks, numOfTracks):
 
         # export master
         filePath = mergedTrack + "1.wav"
+        # filePath = mergedTrack + "1.wav"
         master.export(filePath, format="wav")
 
         # check if user selected to upload song to web
         if shouldUpload:
 
             # define api endpoints
-            wavURL = "http://files.ragtagrecords.com/songs/"
-            zipURL = "http://files.ragtagrecords.com/zips/"
-            songURL = "http://api.ragtagrecords.com/public/songs"
+            wavURL = "https://files.ragtagrecords.com/songs/"
+            zipURL = "https://files.ragtagrecords.com/zips/"
+            songURL = "https://api.ragtagrecords.com/songs"
 
             fileName = filePath.split("/").pop()
-            
+            print("file name: ", fileName)
+
             if songSelectedID == -1:
                 print("User chose to upload new song")
 
@@ -345,15 +347,15 @@ def exportMaster(songNumber, tracks, numOfTracks):
                 shutil.make_archive(stemsFolderPath, 'zip', stemsFolderPath)
                 print("song zip file name: " + str(songNumber).zfill(3) + ".zip")
 
-                songName = "my505_" + songSelected
+                songName = "tester505_" + songSelected
 
                 song = {
                     "song": {
                         "name": songName,
-                        "path": wavURL + fileName,
+                        "path": fileName,
                         # todo: make playlist select menu
                         "playlistIDs": [123],
-                        "zipPath": zipURL + str(songNumber).zfill(3) + ".zip",
+                        "zipPath": str(songNumber).zfill(3) + ".zip",
                     }
                 }
 
