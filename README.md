@@ -31,12 +31,9 @@ Using the Audiofiler API
 
 ## Developers
 
-To run, install pydub:
-`pip install pydub`
-
-On Linux, install tkinter:
-`sudo apt-get install python3-tk`
+To install dependancies:
+`pip install requirements.txt`
 
 To build the app in a Windows environment you can use this command:
-
-`pyinstaller --onefile "Audiofiler RC-505.py" –windowed`
+`cd audiofiler-rc505`
+`pyinstaller --onefile "WAVE/Audiofiler RC-505.py"`
