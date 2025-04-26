@@ -1,0 +1,17 @@
+1. I have 5 recorded tracks and I need more
+2. I want to send my recordings to another person/computer
+	- switch to usb mode
+	- open exe
+	- enter 1 or more memory slot(s) (merge? upload?)
+
+if merge
+	- switch back to standard mode
+	- track 1 will now have all loops playing on top of each other
+	- tracks 2-5 are now open to record and stems are backed up
+	
+if upload
+	- new or existing
+	- automatically land on audiofiler.io/upload-505
+	- {???drag n drop files}
+	- select files from file explorer
+	- name new song or select existing
